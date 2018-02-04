@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Index</title>
+    <style type="text/css">
+        body {
+            background: rgba(0,0,0,.8);
+        }
+
+        body, div, p, ul, ol, li, h2, section {
+            padding: 0;
+            margin: 0;
+            color: #3E679F;
+            font: 13px/1.2 Tahoma,\5b8b\4f53,Arial;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        img {
+            vertical-align: middle;
+            border: none;
+        }
+
+        label {
+            cursor: pointer;
+        }
+
+        a {
+            color: #3e679f;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #f60;
+            }
+
+        #textCanvas {
+            padding: 0;
+            width: 100%;
+        }
+
+            #textCanvas article, #textCanvas p, #textCanvas div, #textCanvas h2 {
+                width: 100%;
+                margin: 0 auto;
+                font: 16px/1.6 '';
+                color: #000;
+                padding: 10px 0;
+            }
+
+            #textCanvas article {
+                width: 66%;
+                padding: 15px 65px;
+                margin: 0 auto 15px;
+                background: #fff;
+            }
+
+                #textCanvas article span {
+                    text-align: center;
+                }
+
+            #textCanvas p, #textCanvas ol, #textCanvas ul {
+                text-indent: 2em;
+            }
+
+            #textCanvas li, #textCanvas div {
+                font: 16px/1.6 '';
+                color: #000;
+                padding: 3px 0;
+            }
+
+                #textCanvas a, #textCanvas li a {
+                    color: blue;
+                    margin: 0 5px;
+                    border-bottom: 1px solid blue;
+                }
+
+            #textCanvas u {
+                text-decoration: none;
+            }
+
+            #textCanvas h2 {
+                font: bold 18px/1.4 '';
+            }
+
+            #textCanvas pre, #textCanvas blockquote {
+                margin: 0;
+                padding: 5px;
+                font: 14px/1.4 '';
+                background: #eef1fb;
+                border: 1px solid #aaa;
+                text-align: left;
+                width: 100%;
+                border-radius: 5px;
+            }
+
+                #textCanvas pre p, #textCanvas pre li, #textCanvas pre div, #textCanvas blockquote p, #textCanvas blockquote li, #textCanvas blockquote div {
+                    margin: 0;
+                    padding: 5px;
+                    font: 14px/1.4 '';
+                }
+
+            #textCanvas code {
+                padding: 5px 0;
+                background: #eef1fb;
+                font-weight: 700;
+            }
+
+            #textCanvas pre code, #textCanvas blockquote code {
+                font-weight: normal;
+            }
+
+            #textCanvas b, #textCanvas strong {
+                display: block;
+                padding: 10px 0;
+            }
+
+            #textCanvas p b, #textCanvas div b, #textCanvas table b, #textCanvas p strong, #textCanvas div strong, #textCanvas table strong {
+                display: inline;
+                padding: 0;
+            }
+
+            #textCanvas table {
+                margin: 0 auto;
+                text-align: center;
+            }
+
+                #textCanvas table p, #textCanvas table div {
+                    width: 100%;
+                }
+
+            #textCanvas img.tinyImage {
+                float: left;
+                margin: 1em;
+                max-width: 96.5%;
+            }
+
+            #textCanvas img.largeImage {
+                float: none;
+                margin: 1em auto;
+                display: block;
+                clear: both;
+                max-width: 96.5%;
+            }
+
+            #textCanvas p.title {
+                font-weight: 900;
+                font-size: 24px;
+                text-align: center;
+            }
+
+            #textCanvas p.share {
+                padding: 0;
+                margin: 0 80px 10px 0;
+                text-align: right;
+                float: right;
+            }
+
+                #textCanvas p.share a {
+                    border: none;
+                }
+
+                #textCanvas p.share img {
+                    display: inline;
+                    margin: 0;
+                }
+    </style>
+</head>
+<body youdao="bind">
+    <div>
+
+        <div>
+            <div id="textCanvas">
+                <article style="margin-bottom: 0px; height: 1051px;">
+                    <p class="title">android fill_parent和match_parent 的区别&nbsp;&nbsp;</p>
+                    <p class="share">
+                        作者：不详
+       
+                    </p>
+                    <hr>
+                    <p>Android2.2中match_parent和fill_parent是一个意思</p>
+                    <p>标题里已经把这个意思表达清楚了，两个参数意思一样，只是某大仙觉得match_parent更贴切，于是从2.2开始你两个词都可以用。那么如果考虑低版本的使用情况你就需要用fill_parent了。</p>
+                    <p>下面是两者相同的证据，看android.view.ViewGroup里的静态嵌套类LayoutParams中的代码：</p>
+                    <p>01 public&nbsp;static&nbsp;final&nbsp;int&nbsp;FILL_PARENT&nbsp;=&nbsp;-1;</p>
+                    <p>02 /**&nbsp;</p>
+                    <p>03 *&nbsp;Special&nbsp;value&nbsp;for&nbsp;the&nbsp;height&nbsp;or&nbsp;width&nbsp;requested&nbsp;by&nbsp;a&nbsp;View.&nbsp;</p>
+                    <p>04 *&nbsp;MATCH_PARENT&nbsp;means&nbsp;that&nbsp;the&nbsp;view&nbsp;wants&nbsp;to&nbsp;be&nbsp;as&nbsp;big&nbsp;as&nbsp;its&nbsp;parent,&nbsp;</p>
+                    <p>05 *&nbsp;minus&nbsp;the&nbsp;parent's&nbsp;padding,&nbsp;if&nbsp;any.&nbsp;Introduced&nbsp;in&nbsp;API&nbsp;Level&nbsp;8.&nbsp;</p>
+                    <p>06 */</p>
+                    <p>07 public&nbsp;static&nbsp;final&nbsp;int&nbsp;MATCH_PARENT&nbsp;=&nbsp;-1;</p>
+                    <p>08&nbsp;&nbsp;&nbsp;/**&nbsp;</p>
+                    <p>09 *&nbsp;Special&nbsp;value&nbsp;for&nbsp;the&nbsp;height&nbsp;or&nbsp;width&nbsp;requested&nbsp;by&nbsp;a&nbsp;View.&nbsp;</p>
+                    <p>10 *&nbsp;WRAP_CONTENT&nbsp;means&nbsp;that&nbsp;the&nbsp;view&nbsp;wants&nbsp;to&nbsp;be&nbsp;just&nbsp;large&nbsp;enough&nbsp;to&nbsp;fit&nbsp;</p>
+                    <p>11 *&nbsp;its&nbsp;own&nbsp;internal&nbsp;content,&nbsp;taking&nbsp;its&nbsp;own&nbsp;padding&nbsp;into&nbsp;account.&nbsp;</p>
+                    <p>12 */</p>
+                    <p>&nbsp;</p>
+                    <p>本样式参考<a href="http://os.heimali.com/webElements/article.php?id=170" target="_blank">http://os.heimali.com/webElements/article.php?id=170</a></p>
+                </article>
+            </div>
+        </div>
+
+        <script>
+            function resetHeight() {
+                var articles = document.querySelectorAll('#textCanvas > article'), doc = document.documentElement;
+                if (articles.length == 1) {
+                    articles[0].style.marginBottom = 0; articles[0].style.height = Math.max(doc.clientHeight, doc.scrollHeight) - 30 + 'px';
+                }
+            }
+            window.onresize = window.onload = resetHeight;
+        </script>
+
+    </div>
+
+
+</body>
+</html>

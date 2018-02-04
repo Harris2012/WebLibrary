@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>ÍøÕ¾Ê×Ò³</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .topbar {
+            position: fixed;
+            height: 60px;
+            width: 100%;
+            background: -webkit-linear-gradient(#fff,#ccc,#fff);
+            z-index: 9999;
+        }
+
+        #menu {
+            width: 1000px;
+            margin: 5px auto 0 auto;
+        }
+
+            #menu li {
+                height: 48px;
+                width: 48px;
+                line-height: 48px;
+                text-align: center;
+                margin: 1px;
+                float: left;
+                list-style-type: none;
+            }
+
+                #menu li:hover {
+                    cursor: pointer;
+                }
+
+        .current {
+            font-weight: bold;
+        }
+
+        #content {
+            position: absolute;
+            top: 60px;
+            width: 100%;
+        }
+
+        .linkBar {
+            margin: 0 auto 3px auto;
+            width: 1000px;
+            height: 200px;
+            background-color: #ddd;
+        }
+    </style>
+    <!-[if IE]> <style type="text/css"> .topbar { background-color:#ddd; }</style> <![endif]->
+</head>
+<body>
+    <div class="topbar">
+        <div class="menucontainer">
+            <ul id="menu">
+                    <li goto='#section0'>0</li>
+                    <li goto='#section1'>1</li>
+                    <li goto='#section2'>2</li>
+                    <li goto='#section3'>3</li>
+                    <li goto='#section4'>4</li>
+                    <li goto='#section5'>5</li>
+                    <li goto='#section6'>6</li>
+                    <li goto='#section7'>7</li>
+                    <li goto='#section8'>8</li>
+                    <li goto='#section9'>9</li>
+                    <li goto='#section10'>10</li>
+                    <li goto='#section11'>11</li>
+                    <li goto='#section12'>12</li>
+                    <li goto='#section13'>13</li>
+                    <li goto='#section14'>14</li>
+                    <li goto='#section15'>15</li>
+                    <li goto='#section16'>16</li>
+                    <li goto='#section17'>17</li>
+                    <li goto='#section18'>18</li>
+                    <li goto='#section19'>19</li>
+            </ul>
+        </div>
+    </div>
+    <div id="content">
+            <section id='section0' class="linkBar">
+                This is section 0
+            </section>
+            <section id='section1' class="linkBar">
+                This is section 1
+            </section>
+            <section id='section2' class="linkBar">
+                This is section 2
+            </section>
+            <section id='section3' class="linkBar">
+                This is section 3
+            </section>
+            <section id='section4' class="linkBar">
+                This is section 4
+            </section>
+            <section id='section5' class="linkBar">
+                This is section 5
+            </section>
+            <section id='section6' class="linkBar">
+                This is section 6
+            </section>
+            <section id='section7' class="linkBar">
+                This is section 7
+            </section>
+            <section id='section8' class="linkBar">
+                This is section 8
+            </section>
+            <section id='section9' class="linkBar">
+                This is section 9
+            </section>
+            <section id='section10' class="linkBar">
+                This is section 10
+            </section>
+            <section id='section11' class="linkBar">
+                This is section 11
+            </section>
+            <section id='section12' class="linkBar">
+                This is section 12
+            </section>
+            <section id='section13' class="linkBar">
+                This is section 13
+            </section>
+            <section id='section14' class="linkBar">
+                This is section 14
+            </section>
+            <section id='section15' class="linkBar">
+                This is section 15
+            </section>
+            <section id='section16' class="linkBar">
+                This is section 16
+            </section>
+            <section id='section17' class="linkBar">
+                This is section 17
+            </section>
+            <section id='section18' class="linkBar">
+                This is section 18
+            </section>
+            <section id='section19' class="linkBar">
+                This is section 19
+            </section>
+    </div>
+    <script src="jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#menu li").each(function (index) {
+                $(this).attr("style", "background:hsl(" + index * 12 + ",100%,50%)");
+            });
+            $('#menu').delegate("li", "mouseenter", function () {
+                $(this).attr("style", "background:#aaa");
+            });
+            $('#menu').delegate("li", "mouseleave", function () {
+                $(this).attr("style", "background:hsl(" + $("li").index(this) * 12 + ",100%,50%)");
+            });
+            $("#menu li").eq(0).addClass("current");
+
+            $('#menu').delegate("li", "click", function () {
+                goToLink($(this).attr("goto"));
+            });
+            $(window).scroll(function () {
+                var top = document.documentElement.scrollTop
+                    || document.body.scrollTop
+                    || window.pageYOffset
+                    || window.scrollY || 0;
+                $("#menu li").removeClass("current");
+                $("#menu li").eq(top / 200).addClass("current");
+            });
+        });
+        function goToLink(link) {
+            var goPosition = $(link).offset().top - 60;
+            $('html,body').animate({ scrollTop: goPosition }, 'slow');
+        }
+    </script>
+</body>
+</html>

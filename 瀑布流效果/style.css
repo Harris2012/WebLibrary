@@ -1,0 +1,162 @@
+﻿body {
+    background: rgba(0,0,0,.8);
+}
+
+body, div, p, ul, ol, li, h2, section {
+    padding: 0;
+    margin: 0;
+    color: #3E679F;
+    font: 13px/1.2 Tahoma,\5b8b\4f53,Arial;
+}
+
+ul, li {
+    list-style: none;
+}
+
+img {
+    vertical-align: middle;
+    border: none;
+}
+
+label {
+    cursor: pointer;
+}
+
+a {
+    color: #3e679f;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #f60;
+    }
+
+#textCanvas {
+    padding: 0;
+    width: 100%;
+}
+
+    #textCanvas article, #textCanvas p, #textCanvas div, #textCanvas h2 {
+        width: 100%;
+        margin: 0 auto;
+        font: 16px/1.6 '';
+        color: #000;
+        padding: 10px 0;
+    }
+
+    #textCanvas article {
+        width: 66%;
+        padding: 15px 65px;
+        margin: 0 auto 15px;
+        background: #fff;
+    }
+
+        #textCanvas article span {
+            text-align: center;
+        }
+
+    #textCanvas p, #textCanvas ol, #textCanvas ul {
+        text-indent: 2em;
+    }
+
+    #textCanvas li, #textCanvas div {
+        font: 16px/1.6 '';
+        color: #000;
+        padding: 3px 0;
+    }
+
+        #textCanvas a, #textCanvas li a {
+            color: blue;
+            margin: 0 5px;
+            border-bottom: 1px solid blue;
+        }
+
+    #textCanvas u {
+        text-decoration: none;
+    }
+
+    #textCanvas h2 {
+        font: bold 18px/1.4 '';
+    }
+
+    #textCanvas pre, #textCanvas blockquote {
+        margin: 0;
+        padding: 5px;
+        font: 14px/1.4 '';
+        background: #eef1fb;
+        border: 1px solid #aaa;
+        text-align: left;
+        width: 100%;
+        border-radius: 5px;
+    }
+
+        #textCanvas pre p, #textCanvas pre li, #textCanvas pre div, #textCanvas blockquote p, #textCanvas blockquote li, #textCanvas blockquote div {
+            margin: 0;
+            padding: 5px;
+            font: 14px/1.4 '';
+        }
+
+    #textCanvas code {
+        padding: 5px 0;
+        background: #eef1fb;
+        font-weight: 700;
+    }
+
+    #textCanvas pre code, #textCanvas blockquote code {
+        font-weight: normal;
+    }
+
+    #textCanvas b, #textCanvas strong {
+        display: block;
+        padding: 10px 0;
+    }
+
+    #textCanvas p b, #textCanvas div b, #textCanvas table b, #textCanvas p strong, #textCanvas div strong, #textCanvas table strong {
+        display: inline;
+        padding: 0;
+    }
+
+    #textCanvas table {
+        margin: 0 auto;
+        text-align: center;
+    }
+
+        #textCanvas table p, #textCanvas table div {
+            width: 100%;
+        }
+
+    #textCanvas img.tinyImage {
+        float: left;
+        margin: 1em;
+        max-width: 96.5%;
+    }
+
+    #textCanvas img.largeImage {
+        float: none;
+        margin: 1em auto;
+        display: block;
+        clear: both;
+        max-width: 96.5%;
+    }
+
+    #textCanvas p.title {
+        font-weight: 900;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    #textCanvas p.share {
+        padding: 0;
+        margin: 0 80px 10px 0;
+        text-align: right;
+        float: right;
+    }
+
+        #textCanvas p.share a {
+            border: none;
+        }
+
+        #textCanvas p.share img {
+            display: inline;
+            margin: 0;
+        }

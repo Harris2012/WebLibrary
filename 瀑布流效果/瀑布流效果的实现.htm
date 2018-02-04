@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>瀑布流效果的实现</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <style type="text/css">
+        pre.prettyprint {
+            padding: 2px;
+            border: 1px solid #888;
+            font-family: Courier New;
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        
+<div><div id="textCanvas">
+    <article style="margin-bottom: 0px; height: 8273px;">
+        <p class="title">Web前端学习笔记-瀑布流的算法分析与代码实现</p>
+        <p class="share">
+            作者：不详
+        </p>
+        <hr>
+
+        <p>瀑布流效果目前应用很广泛,像花瓣,新浪轻博,蘑菇街,美丽说等好多网站都有.也有好多支持该效果的前段框架,今天学习了一下这种效果的实现,不依赖插件,自己动手分析实现过程,为了便于叙述清楚,分析中的一些名词为自己拟定,不当之处还望见谅.</p>
+
+        <p>思路分析</p>
+        <p>步骤一：构建成行元素 + 寻找新增元素追加位置</p>
+        <p>瀑布流所有元素的宽度是固定的,我们用浏览器的宽度除以每个瀑布流块的宽度,就是每一行可容纳的瀑布流块的个数.因为,每个瀑布流块的高度不一,我们姑且把组成一行的这组元素称为成行元素,在成行元素放置完毕后,我们如果要再增加一个元素,那么它的位置应该这样找?</p>
+        <p>“获取成行元素集合中高度最低的那个元素,待放置的元素的top值应该是这个最低元素的高,left值应该是这个最低元素的left值”</p>
+        <p>这样,新增的这一个元素我们就找到了它存放的位置.这样成行元素中的最低高度值就变为了原来的高度+新增元素的高度.</p>
+        <p>步骤二：重复步骤一,依赖成行元素追加新元素</p>
+        <p>步骤一中我们已经实现了一次成行元素追加一个新的元素,这样新元素增加之后我们就构建了新的成行元素,之后的操作就是在新的成行元素中追加新元素,原理同步骤一.</p>
+        <p>步骤三：实现滚动位置监听,到底部时加载数据</p>
+        <p>代码实现</p>
+        <p>实现步骤一描述效果:</p>
+        <p>
+            <img src="img/2-1.png" alt="" class="largeImage">
+        </p>
+        <p>实现代码</p>
+        <pre class="prettyprint">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;瀑布流效果实现&lt;/title&gt;
+    &lt;script type="text/javascript" src="scripts/jquery-1.8.2.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="scripts/jquery.easydrag.handler.beta2.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        window.onload=function(){
+            //获取父级对象
+            var oParent = document.getElementById("main");
+            //获取父级[第一个参数]下的所有的子元素[按照第二个参数匹配]
+            var aPin = getClassObject(oParent,"pin");
+            //获取每一个块的宽度
+            var iPinW = aPin[0].offsetWidth;
+            // //计算每行放多少个pin(瀑布流块)页面的宽度/每一个瀑布流块的宽度
+            var num = Math.floor(document.documentElement.clientWidth/iPinW);
+            //重置父级的样式,这样保证图片整体居中
+            oParent.style.cssText="width:" + num*iPinW + "px;margin:0 auto;";
+            
+            var compareArray = [];
+            //将一整行的瀑布流块的高度压入一个数组
+            for (var i = 0; i&lt;num; i++) {
+                compareArray[i] =     aPin[i].offsetHeight;
+            }
+
+            //获取该行瀑布流高度最低的值
+            var minHeight = Math.min.apply('',compareArray);
+            //alert(compareArray + ",min=" + minHeight);
+            //获取改行高度值最小的瀑布流块的索引
+            var minHkey = getMinHeightKey(compareArray,minHeight);
+            
+            //为新增的瀑布流块增加样式
+            aPin[num].style.position = "absolute";
+            aPin[num].style.top = minHeight + "px";
+            //设定新增加的瀑布流块的top和left
+            aPin[num].style.left =aPin[minHkey].offsetLeft + "px";
+
+            //将该索引位置的高度改变为新增后的高度[原来瀑布流块的高度+新增的瀑布流块的高度]
+            compareArray[minHkey] += aPin[num].offsetHeight;
+
+        }
+        /**
+         *     获取parent下所有样式名为className的对象集合
+         */
+        function getClassObject(parent,className){
+            var obj = parent.getElementsByTagName("*");
+            var result = [];
+            for(var i=0; i&lt;obj.length;i++){
+                //变量如果匹配className,将匹配的对象放入数组
+                if(obj[i].className==className){
+                    result.push(obj[i]);
+                }
+            }
+            return result;
+        }
+
+        /**
+         *    获取arr数组中值为minH的值在数组中的索引
+         */
+        function getMinHeightKey(arr,minH){
+            for(key in arr){
+                if(arr[key] == minH){
+                    return key;
+                }
+            }
+        }
+    &lt;/script&gt;
+    &lt;style type="text/css"&gt;
+        /*设置每一个瀑布流块*/
+        #main .pin{
+            width:220px;
+            height: auto;
+            padding: 15px 0px 0px 15px; /*上 右 下 左*/
+            float: left;
+        }
+        /*设置每一个瀑布流块中的图像样式*/
+        #main .pin .box{
+            width: 200px;
+            height: auto;
+            padding: 10px;
+            background: #FFF;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 6px #ccc; /*中间投影*/
+            border-radius: 5px; /*圆角*/
+        }
+        #main .pin .box img{
+            width: 200px;
+
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="main"&gt;
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012110120000859759.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012072300483800466.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012101912011350194.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012102421195356552.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012072312335411883.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+
+        &lt;!--每一个小块-&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012082910221472225.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        <p>实现步骤二描述效果</p>
+        <p>
+            <img src="img/2-2.png" alt="" class="largeImage">
+        </p>
+<pre>doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;瀑布流效果实现&lt;/title&gt;
+    &lt;script type="text/javascript" src="scripts/jquery-1.8.2.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="scripts/jquery.easydrag.handler.beta2.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        window.onload=function(){
+            //获取父级对象
+            var oParent = document.getElementById("main");
+            //获取父级[第一个参数]下的所有的子元素[按照第二个参数匹配]
+            var aPin = getClassObject(oParent,"pin");
+            //获取每一个块的宽度
+            var iPinW = aPin[0].offsetWidth;
+            // //计算每行放多少个pin(瀑布流块)页面的宽度/每一个瀑布流块的宽度
+            var num = Math.floor(document.documentElement.clientWidth/iPinW);
+            //重置父级的样式,这样保证图片整体居中
+            oParent.style.cssText="width:" + num*iPinW + "px;margin:0 auto;";
+            
+            var compareArray = [];
+            //遍历获取到的所有瀑布流块
+            for (var i = 0; i&lt;aPin.length; i++) {
+                if(i&lt;num){
+                    //成行元素
+                    compareArray[i] = aPin[i].offsetHeight;
+                }else{
+                    //获取成行元素中高度最低的值
+                    var minHeight = Math.min.apply('',compareArray);
+                    //alert(compareArray + ",min=" + minHeight);
+                    //获取成行元素中高度最低元素的索引
+                    var minHkey = getMinHeightKey(compareArray,minHeight);
+                    //为新增的瀑布流块设置定位
+                    aPin[i].style.position = "absolute";
+                    aPin[i].style.top = minHeight + "px";
+                    //设定新增加的瀑布流块的top和left
+                    aPin[i].style.left =aPin[minHkey].offsetLeft + "px";
+                    //将该索引位置的高度改变为新增后的高度[原来瀑布流块的高度+新增的瀑布流块的高度]
+                    compareArray[minHkey] += aPin[i].offsetHeight;
+                }
+                
+            }
+
+        }
+        /**
+         *     获取parent下所有样式名为className的对象集合
+         */
+        function getClassObject(parent,className){
+            var obj = parent.getElementsByTagName("*");
+            var result = [];
+            for(var i=0; i&lt;obj.length;i++){
+                //变量如果匹配className,将匹配的对象放入数组
+                if(obj[i].className==className){
+                    result.push(obj[i]);
+                }
+            }
+            return result;
+        }
+
+        /**
+         *    获取arr数组中值为minH的值在数组中的索引
+         */
+        function getMinHeightKey(arr,minH){
+            for(key in arr){
+                if(arr[key] == minH){
+                    return key;
+                }
+            }
+        }
+    &lt;/script&gt;
+    &lt;style type="text/css"&gt;
+        /*设置每一个瀑布流块*/
+        #main .pin{
+            width:220px;
+            height: auto;
+            padding: 15px 0px 0px 15px; /*上 右 下 左*/
+            float: left;
+        }
+        /*设置每一个瀑布流块中的图像样式*/
+        #main .pin .box{
+            width: 200px;
+            height: auto;
+            padding: 10px;
+            background: #FFF;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 6px #ccc; /*中间投影*/
+            border-radius: 5px; /*圆角*/
+        }
+        #main .pin .box img{
+            width: 200px;
+
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="main"&gt;
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012110120000859759.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012072300483800466.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012101912011350194.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012102421195356552.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012072312335411883.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012082910221472225.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!--每一个小块--&gt;
+        &lt;div class="pin"&gt;
+            &lt;div class="box"&gt;
+                &lt;img src="images/2012082910024626515.jpg"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        <p>会看到新增的瀑布流块在新的成行元素中自动寻找高度最低的那个元素块的相对位置进行追加.添加更多元素查看效果</p>
+        <p>
+            <img src="img/2-3.png" alt="" class="largeImage">
+        </p>
+        <p>步骤三：实现滚动到底部时加载数据</p>
+        <p>该部分没有什么功能,只是检测滚动条的位置距离浏览器底部的相对距离进行数据加载,加载数据时创建对应的瀑布流块.判断相对距离的实现逻辑如下</p>
+<pre>function checkScrollSite(){
+    var oParent = document.getElementById("main");
+    var aPin = getClassObject(oParent,"pin");
+    //加载数据依赖最后一个瀑布流块变化
+    var lastPinHeight = aPin[aPin.length-1].offsetTop + Math.floor(aPin[aPin.length-1].offsetHeight/2) ;
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    //浏览器高度
+    var documentH = document.documentElement.clientHeight;
+    if(lastPinHeight+ scrollTop){
+    //请求数据
+    return true;
+    }
+    return false;
+}</pre>
+        <p>在此感谢,郑印在学习上给予的指导.</p>
+        <p>转载请注明出处:[http://www.cnblogs.com/dennisit/p/3244987.html]</p>
+        <p></p>
+    </article>
+</div></div>
+
+<script>
+    function resetHeight() {
+        var articles = document.querySelectorAll('#textCanvas > article'), doc = document.documentElement;
+        if (articles.length == 1) {
+            articles[0].style.marginBottom = 0; articles[0].style.height = Math.max(doc.clientHeight, doc.scrollHeight) - 30 + 'px';
+        }
+    }
+    window.onresize = window.onload = resetHeight;
+</script>
+
+    </div>
+
+
+</body></html>
